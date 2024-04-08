@@ -15,9 +15,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 public class Invoice implements Serializable {
-//  private static final long serialVersionUID = -4439114469417994311L;
+  private static final long serialVersionUID = -4439114469417994311L;
   @Id
-  @GeneratedValue
+//  @GeneratedValue(v)
   private int invId;
 
   private String invName;

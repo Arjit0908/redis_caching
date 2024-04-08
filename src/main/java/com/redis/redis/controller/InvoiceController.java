@@ -31,14 +31,13 @@ public class InvoiceController {
     return invoiceService.getOneInvoice(id);
   }
 
-  @PutMapping("/modify/{id}")
-  public Invoice updateInvoice(@RequestBody Invoice inv, @PathVariable Integer id) {
-    return invoiceService.updateInvoice(inv, id);
-  }
-
   @DeleteMapping("/delete/{id}")
   public String deleteInvoice(@PathVariable Integer id) {
     invoiceService.deleteInvoice(id);
     return "Employee with id: " + id + " Deleted !";
+  }
+  @PutMapping("/modify/{id}")
+  public Invoice updateInvoice(@RequestBody Invoice inv, @PathVariable Integer id) {
+    return invoiceService.updateInvoice(inv, id);
   }
 }

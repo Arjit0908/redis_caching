@@ -3,6 +3,7 @@ package com.redis.redis.service;
 import com.redis.redis.Respository.InvoiceRepository;
 import com.redis.redis.entity.Invoice;
 import com.redis.redis.exception.InvoiceNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@Slf4j
 public class InvoiceServiceImpl implements InvoiceService {
 
   @Autowired
@@ -53,6 +55,7 @@ public class InvoiceServiceImpl implements InvoiceService {
   @Override
   @Cacheable(value = "Invoice")
   public List<Invoice> getAllInvoices() {
+    log.info("get data from db");
     return invoiceRepo.findAll();
   }
 }
