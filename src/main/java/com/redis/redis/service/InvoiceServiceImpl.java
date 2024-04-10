@@ -5,6 +5,7 @@ import com.redis.redis.entity.Invoice;
 import com.redis.redis.exception.InvoiceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -25,19 +26,10 @@ public class InvoiceServiceImpl implements InvoiceService {
     return invoiceRepo.save(inv);
   }
 
-  @Override
-  @CachePut(value = "Invoice", key = "#invId")
-  public Invoice updateInvoice(Invoice inv, Integer invId) {
-    Invoice invoice = invoiceRepo.findById(invId)
-        .orElseThrow(() -> new InvoiceNotFoundException("Invoice Not Found"));
-    invoice.setInvAmount(inv.getInvAmount());
-    invoice.setInvName(inv.getInvName());
-    return invoiceRepo.save(invoice);
-  }
 
   @Override
   @CacheEvict(value = "Invoice", key = "#invId")
-  // @CacheEvict(value="Invoice", allEntries=true) //in case there are multiple records to delete
+//  @CacheEvict(value = "Invoice", allEntries = true) //in case there are multiple records to delete
   public void deleteInvoice(Integer invId) {
     Invoice invoice = invoiceRepo.findById(invId)
         .orElseThrow(() -> new InvoiceNotFoundException("Invoice Not Found"));
@@ -58,4 +50,22 @@ public class InvoiceServiceImpl implements InvoiceService {
     log.info("get data from db");
     return invoiceRepo.findAll();
   }
+
+  @Override
+  @CachePut(value = "Invoice", key = "#invId")
+  public Invoice updateInvoice(Invoice inv, Integer invId) {
+    log.info("modify record");
+    Invoice invoice = invoiceRepo.findById(invId)
+        .orElseThrow(() -> new InvoiceNotFoundException("Invoice Not Found"));
+    invoice.setInvAmount(inv.getInvAmount());
+    invoice.setInvName(inv.getInvName());
+    return invoiceRepo.save(invoice);
+  }
+//  @Autowired
+//  public void refreshCache(String cacheName) {
+//    Cache cache = cacheManager.getCache(cacheName);
+//    if (cache != null) {
+//      cache.clear(); // Clears all entries from the cache, effectively refreshing it
+//    }
+//}
 }
